@@ -45,13 +45,12 @@ class Catalogue:
         self.items = self._create(items)
 
     def _create(self, item_list):
-        return [Item(name=x[0], price=x[1]) for x in item_list]
+        return [Item(name=item[0], price=item[1]) for item in item_list]
 
     def get(self, item_name):
         for item in self.items:
             if item_name.lower() == item.name.lower():
                 return item
-        print(f"No item with name {item_name} found in the catalogue")
 
     def fuzzy_get(self, item_sub):
         """

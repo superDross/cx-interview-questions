@@ -36,7 +36,7 @@ class Basket:
         """
         Take a given quantity of an item out the basket
         """
-        item_names = [x.name.lower() for x in self._items]
+        item_names = [item.name.lower() for item in self._items]
         item_index = item_names.index(item_name)
         self._items.pop(item_index)
         self.calculate_price()
@@ -52,6 +52,6 @@ class Basket:
         """
         Calculates subtotal, disount & total price of all items in the basket
         """
-        self.subtotal = rounder(sum(x.price * x.quantity for x in self._items))
+        self.subtotal = rounder(sum(item.price * item.quantity for item in self._items))
         self.apply_discount()
         self.total = rounder(self.subtotal - self.discount)

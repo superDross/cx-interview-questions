@@ -7,6 +7,12 @@ class Discount:
     def __init__(self, name):
         self.name = name
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"Discount({self.name})"
+
     def calulate_discount(self, items):
         raise NotImplementedError
 
@@ -24,22 +30,24 @@ class PercentageOff(Discount):
 
 
 class GetOneFree(Discount):
-    def __init__(self, name, to_buy):
+    def __init__(self, name, threshold):
         super().__init__(name)
-        self.to_buy = to_buy
+        # number needed to purchase to receive the offer
+        self.threshold = threshold
 
     def calculate_discount(self, items):
         for item in items:
             if self.name == item.name:
-                if item.quantity > self.to_buy:
-                    num_free = item.quantity // (self.to_buy + 1)
+                if item.quantity > self.threshold:
+                    num_free = item.quantity // (self.threshold + 1)
                     return num_free * item.price
 
 
 class CheapestOneFree(Discount):
-    def __init__(self, name, to_buy):
+    def __init__(self, name, threshold):
         super().__init__(name)
-        self.to_buy = to_buy
+        # number needed to purchase to receive the offer
+        self.threshold = threshold
         self.discount = 0
 
     def _individual_item_discount(self, items):
@@ -48,24 +56,24 @@ class CheapestOneFree(Discount):
         the threshold for the offer
         """
         for item in items:
-            if item.quantity >= self.to_buy:
-                self.discount += (item.quantity // self.to_buy) * item.price
+            if item.quantity >= self.threshold:
+                self.discount += (item.quantity // self.threshold) * item.price
 
     def _grouped_discount(self, items):
         """
         Apply discount to grouped items that are collectively above
         the offer threshold but individually beneath it
         """
-        relevant_items = [item for item in items if item.quantity < self.to_buy]
+        relevant_items = [item for item in items if item.quantity < self.threshold]
         if relevant_items:
             total_quantity = sum(item.quantity for item in relevant_items)
             lowest_price = min([item.price for item in relevant_items])
-            if total_quantity >= self.to_buy:
-                self.discount += (total_quantity // self.to_buy) * lowest_price
+            if total_quantity >= self.threshold:
+                self.discount += (total_quantity // self.threshold) * lowest_price
 
     def calculate_discount(self, items):
         self.discount = 0
-        relevant_items = [x for x in items if self.name in x.name]
+        relevant_items = [item for item in items if self.name in item.name]
         if relevant_items:
             self._individual_item_discount(relevant_items)
             self._grouped_discount(relevant_items)

@@ -9,5 +9,5 @@ def rounder(number):
     """
     context = decimal.getcontext()
     context.rounding = decimal.ROUND_HALF_UP
-    d = round(decimal.Decimal(str(number)), 2)
-    return float(d)
+    rounded_decimal = round(decimal.Decimal(str(number)), 2)
+    return float(rounded_decimal)
