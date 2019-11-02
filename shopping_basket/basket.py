@@ -43,12 +43,10 @@ class Basket:
 
     def apply_discount(self):
         self.discount = 0
-        for item in self._items:
-            offer = self.offers.get(item.name)
-            if offer:
-                discount = offer.calculate_discount(item)
-                if discount:
-                    self.discount += rounder(discount)
+        for offer in self.offers.discounts:
+            discount = offer.calculate_discount(self._items)
+            if discount:
+                self.discount += rounder(discount)
 
     def calculate_price(self):
         """

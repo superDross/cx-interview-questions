@@ -6,7 +6,7 @@ Compatible with Python 3.6 or higher.
 
 ## Usage
 
-The catalogue and offers are defined which can then be used to create a basket class:
+The catalogue and offers are defined which can then be used to create a Basket object:
 
 ```python
 from basket import Basket

@@ -21,9 +21,10 @@ def create_catalogue():
 def create_offers():
     return Offers(
         [
-            ("Baked Beans", 0, 2),
-            ("Sardines", 25, 0),
-            ("Super Cool Totes Available Item", 100, 0),
+            ("Baked Beans", 0, 2, 0),
+            ("Sardines", 25, 0, 0),
+            ("Super Cool Totes Available Item", 100, 0, 0),
+            ("Shampoo", 0, 0, 3),
         ]
     )
 
@@ -54,6 +55,15 @@ class TestBasket(TestCase):
         self.assertEqual(self.basket.subtotal, 6.87)
         self.assertEqual(self.basket.discount, 1.42)
         self.assertEqual(self.basket.total, 5.45)
+
+    def test_cheapest_free_discount(self):
+        self.basket.add("shampoo (large)", quantity=3)
+        self.basket.add("shampoo (medium)")
+        self.basket.add("shampoo (small)", quantity=2)
+
+        self.assertEqual(self.basket.subtotal, 17.00)
+        self.assertEqual(self.basket.discount, 5.50)
+        self.assertEqual(self.basket.total, 11.50)
 
     def test_mixed_discount(self):
         self.basket.add("baked beans", 2)
