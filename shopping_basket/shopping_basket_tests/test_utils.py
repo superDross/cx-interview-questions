@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from shopping_basket.utils import rounder
+from utils import rounder
 
 
 class TestRounder(TestCase):
