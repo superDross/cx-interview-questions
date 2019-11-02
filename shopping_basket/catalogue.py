@@ -1,3 +1,8 @@
+"""
+Classes to aid in creating a shopping inventory.
+"""
+
+
 class Item:
     """
     Individual shopping item available in the inventory
