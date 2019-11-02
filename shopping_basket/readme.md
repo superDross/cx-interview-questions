@@ -24,8 +24,8 @@ catalogue = Catalogue(
 
 offers = Offers(
     [
-        ("Baked Beans", 0, 2),
-        ("Sardines", 25, 0),
+        ("Baked Beans", 0, 2, 0),
+        ("Sardines", 25, 0, 0),
     ]
 )
 
