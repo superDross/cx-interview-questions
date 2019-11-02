@@ -52,3 +52,9 @@ class Catalogue:
             if item_name.lower() == item.name.lower():
                 return item
         print(f"No item with name {item_name} found in the catalogue")
+
+    def fuzzy_get(self, item_sub):
+        """
+        Gets all items with names that match a given substring
+        """
+        return [item for item in self.items if item_sub.lower() in item.name.lower()]

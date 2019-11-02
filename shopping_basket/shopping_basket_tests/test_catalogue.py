@@ -8,7 +8,7 @@ class TestItem(TestCase):
         self.assertRaises(ValueError, Item, name=1, price=1)
 
     def test_value_error_when_price_is_less_zero(self):
-        self.assertRaises(ValueError, Item, name='h', price=-1)
+        self.assertRaises(ValueError, Item, name="h", price=-1)
 
 
 class TestCatalogue(TestCase):
@@ -22,3 +22,14 @@ class TestCatalogue(TestCase):
         catalogue = Catalogue([("Baked Beans", 0.99), ("Biscuits", 1.20)])
         result = catalogue.get("baked beans")
         self.assertEqual(result, catalogue.items[0])
+
+    def test_fuzzy_get(self):
+        catalogue = Catalogue(
+            [
+                ("Baked Beans (small)", 0.99),
+                ("Baked Beans (large)", 1.99),
+                ("Biscuits", 1.20),
+            ]
+        )
+        result = catalogue.fuzzy_get('baked beans')
+        self.assertEqual(catalogue.items[:2], result)
