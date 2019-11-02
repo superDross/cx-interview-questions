@@ -1,7 +1,6 @@
 """
 Allows one to create and manipulate inventory discounts.
 """
-from utils import rounder
 
 
 class Discount:
@@ -17,7 +16,7 @@ class PercentageOff(Discount):
     def calculate_discount(self, item):
         if self.name == item.name:
             discount = (item.price * (self.percentage / 100)) * item.quantity
-            return rounder(discount)
+            return discount
 
 
 class GetOneFree(Discount):
@@ -29,7 +28,7 @@ class GetOneFree(Discount):
         if self.name == item.name:
             if item.quantity > self.to_buy:
                 num_free = item.quantity // (self.to_buy + 1)
-                return rounder(num_free * item.price)
+                return num_free * item.price
 
 
 class Offers:

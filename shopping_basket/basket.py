@@ -48,7 +48,7 @@ class Basket:
             if offer:
                 discount = offer.calculate_discount(item)
                 if discount:
-                    self.discount += discount
+                    self.discount += rounder(discount)
 
     def calculate_price(self):
         """
