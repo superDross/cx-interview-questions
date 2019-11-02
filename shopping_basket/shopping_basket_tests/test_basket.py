@@ -68,3 +68,14 @@ class TestBasket(TestCase):
         self.assertEqual(self.basket.subtotal, 0)
         self.assertEqual(self.basket.discount, 0)
         self.assertEqual(self.basket.total, 0)
+
+    def test_add(self):
+        self.basket.add("sardines")
+        self.assertEqual(self.basket._items[0].name, "Sardines")
+
+    def test_remove(self):
+        self.basket.add("sardines")
+        self.basket.add("biscuits")
+        self.basket.remove("biscuits")
+
+        self.assertEqual(self.basket._items[0].name, "Sardines")

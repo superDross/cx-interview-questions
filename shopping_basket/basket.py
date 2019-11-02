@@ -2,7 +2,7 @@
 Classes allow users to store inventory items
 """
 
-from utils import rounder
+from shopping_basket.utils import rounder
 
 
 class BaseBasket:
@@ -36,7 +36,7 @@ class BaseBasket:
         """
         Take a given quantity of an item out the basket
         """
-        item_names = [x.name for x in self._items]
+        item_names = [x.name.lower() for x in self._items]
         item_index = item_names.index(item_name)
         self._items.pop(item_index)
         self.calculate_price()
