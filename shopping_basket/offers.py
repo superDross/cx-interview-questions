@@ -85,7 +85,7 @@ class Offers:
     Discounts available for our products
 
     Attributes:
-        items (list: tuple): product name, percentage off &/or bgof number
+        items (list: tuple): tuple contains product name and offers
     """
 
     def __init__(self, discounts):
