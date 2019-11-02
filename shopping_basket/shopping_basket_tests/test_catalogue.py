@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from shopping_basket.catalogue import Catalogue, Item
+from catalogue import Catalogue, Item
 
 
 class TestItem(TestCase):

@@ -2,7 +2,7 @@
 Classes allow users to store inventory items
 """
 
-from shopping_basket.utils import rounder
+from utils import rounder
 
 
 class Basket:

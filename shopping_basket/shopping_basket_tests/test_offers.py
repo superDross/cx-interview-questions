@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from shopping_basket.offers import CheapestOneFree, GetOneFree, Offers, PercentageOff
+from offers import CheapestOneFree, GetOneFree, Offers, PercentageOff
 
 
 class TestOffers(TestCase):

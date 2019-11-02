@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from shopping_basket.basket import Basket
-from shopping_basket.catalogue import Catalogue
-from shopping_basket.offers import Offers
+from basket import Basket
+from catalogue import Catalogue
+from offers import Offers
 
 
 def create_catalogue():
