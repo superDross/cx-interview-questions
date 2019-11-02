@@ -5,9 +5,9 @@ Classes allow users to store inventory items
 from shopping_basket.utils import rounder
 
 
-class BaseBasket:
+class Basket:
     """
-    Shopping basket with no ability to apply discounts
+    Shopping basket to calculate prices of stored items
 
     Attributes:
         catalogue (Catalogue): shopping inventory
@@ -42,7 +42,13 @@ class BaseBasket:
         self.calculate_price()
 
     def apply_discount(self):
-        pass
+        self.discount = 0
+        for item in self._items:
+            offer = self.offers.get(item.name)
+            if offer:
+                discount = offer.calculate_discount(item)
+                if discount:
+                    self.discount += discount
 
     def calculate_price(self):
         """
@@ -51,38 +57,3 @@ class BaseBasket:
         self.subtotal = rounder(sum(x.price * x.quantity for x in self._items))
         self.apply_discount()
         self.total = rounder(self.subtotal - self.discount)
-
-
-class Basket(BaseBasket):
-    """
-    Shopping basket that applies discounts
-    """
-
-    def __init__(self, catalogue, offers):
-        super().__init__(catalogue, offers)
-
-    def _percentage_discount(self, offer):
-        item = self.catalogue.get(offer.name)
-        if item:
-            discount = (item.price * (offer.perc / 100)) * item.quantity
-            self.discount += rounder(discount)
-
-    def _one_free_discount(self, offer):
-        item = self.catalogue.get(offer.name)
-        if item:
-            if item.quantity > offer.bgof:
-                num_free = item.quantity // (offer.bgof + 1)
-                self.discount += rounder(num_free * item.price)
-
-    def apply_discount(self):
-        """
-        Calculates the discount prices for all items in your basket
-        and updates the discount attr accordingly
-        """
-        self.discount = 0
-        offers = [self.offers.get(x.name) for x in self._items]
-        for offer in offers:
-            if offer and offer.perc:
-                self._percentage_discount(offer)
-            elif offer and offer.bgof:
-                self._one_free_discount(offer)
