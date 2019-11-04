@@ -57,6 +57,9 @@ class TestDiscounts(TestCase):
         self.assertEqual(discounted_price, 5.50)
 
     def test_buy_3_mugs_get_cheapest_free(self):
+        # 3 large adds 3.50 to discount and the remaining 1 should
+        # be calculated as part of the grouped discount along with
+        # the other 2 sizes
         mugs = [
             Item("Mug (Small)", 2.00),
             Item("Mug (Medium)", 2.50),
@@ -65,3 +68,14 @@ class TestDiscounts(TestCase):
         discount = CheapestOneFree("Mug", 3)
         discounted_price = discount.calculate_discount(mugs)
         self.assertEqual(discounted_price, 5.50)
+
+    def test_buy_4_pens_get_cheapest_free(self):
+        pens = [
+            Item("Pen (Black)", 6.00, 5),
+            Item("Pen (Red)", 1.00)
+        ]
+        discount = CheapestOneFree("Pen", 4)
+        discounted_price = discount.calculate_discount(pens)
+        self.assertEqual(discounted_price, 6.00)
+
+
