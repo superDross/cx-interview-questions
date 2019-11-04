@@ -14,6 +14,10 @@ class Discount:
         return f"Discount({self.name})"
 
     def calulate_discount(self, items):
+        """
+        Returns the amount of money to be discounted from the
+        items original price
+        """
         raise NotImplementedError
 
 
@@ -58,6 +62,7 @@ class CheapestOneFree(Discount):
         for item in items:
             if item.quantity >= self.threshold:
                 self.discount += (item.quantity // self.threshold) * item.price
+                item.quantity = item.quantity % self.threshold
 
     def _grouped_discount(self, items):
         """

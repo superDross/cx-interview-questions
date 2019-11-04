@@ -24,7 +24,7 @@ class Item:
         return self.name
 
     def __repr__(self):
-        return f"Item({self.name})"
+        return f"Item({self.name}, {self.price}, {self.quantity})"
 
     def _check_valid(self):
         if not isinstance(self.name, str):

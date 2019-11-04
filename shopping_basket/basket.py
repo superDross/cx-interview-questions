@@ -2,6 +2,8 @@
 Classes allow users to store inventory items
 """
 
+from copy import deepcopy
+
 from utils import rounder
 
 
@@ -44,7 +46,9 @@ class Basket:
     def apply_discount(self):
         self.discount = 0
         for offer in self.offers.discounts:
-            discount = offer.calculate_discount(self._items)
+            # required otherwise applying discounts alters the quantities
+            items = deepcopy(self._items)
+            discount = offer.calculate_discount(items)
             if discount:
                 self.discount += rounder(discount)
 
