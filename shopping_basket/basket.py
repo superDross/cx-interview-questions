@@ -55,6 +55,6 @@ class Basket:
         """
         Calculates subtotal, disount & total price of all items in the basket
         """
-        self.subtotal = rounder(sum(item.price * item.quantity for item in self._items))
+        self.subtotal = rounder(sum(item.total_price for item in self._items))
         self.apply_discount()
         self.total = rounder(self.subtotal - self.discount)

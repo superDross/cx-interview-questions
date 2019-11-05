@@ -2,32 +2,29 @@
 Classes to aid in creating a shopping inventory.
 """
 
+import dataclasses
+
 from typing import List, Tuple
 
 
+@dataclasses.dataclass(order=True)
 class Item:
-    """
-    Individual shopping item available in the inventory
-    """
+    name: str
+    price: float
+    quantity: int = 1
 
-    def __init__(self, name: str, price: float, quantity: int = 1) -> None:
-        self.name = name
-        self.price = price
-        self.quantity = quantity
-
-        self._check_valid()
-
-    def __str__(self) -> None:
-        return self.name
-
-    def __repr__(self) -> None:
-        return f"Item({self.name}, {self.price}, {self.quantity})"
-
-    def _check_valid(self) -> None:
+    def __post_init__(self) -> None:
         if not isinstance(self.name, str):
             raise ValueError("item name must be string")
         if self.price <= 0:
             raise ValueError("price must be greater than zero")
+
+    def __iter__(self):
+        yield from dataclasses.astuple(self)
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
 
 
 class Catalogue:

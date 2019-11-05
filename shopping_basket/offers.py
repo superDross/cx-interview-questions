@@ -2,24 +2,19 @@
 Allows one to create and manipulate inventory discounts.
 """
 
+import dataclasses
 from typing import List, Tuple, Union
 
 from catalogue import Item
 
 
+@dataclasses.dataclass
 class Discount:
     """
     Individual discount available for a given product name
     """
 
-    def __init__(self, name: str) -> None:
-        self.name = name
-
-    def __str__(self) -> None:
-        return self.name
-
-    def __repr__(self) -> None:
-        return f"Discount({self.name})"
+    name: str
 
     def calulate_discount(self, items: List[Item]) -> None:
         """
@@ -29,10 +24,10 @@ class Discount:
         raise NotImplementedError
 
 
+@dataclasses.dataclass
 class PercentageOff(Discount):
-    def __init__(self, name: str, percentage: Union[int, float]) -> None:
-        super().__init__(name)
-        self.percentage = percentage
+    name: str
+    percentage: Union[int, float]
 
     def calculate_discount(self, items: List[Item]) -> int:
         for item in items:
@@ -41,11 +36,10 @@ class PercentageOff(Discount):
                 return discount
 
 
+@dataclasses.dataclass
 class GetOneFree(Discount):
-    def __init__(self, name: str, threshold: int) -> None:
-        super().__init__(name)
-        # number needed to purchase to receive the offer
-        self.threshold = threshold
+    name: str
+    threshold: int
 
     def calculate_discount(self, items: List[Item]) -> int:
         for item in items:
@@ -55,12 +49,10 @@ class GetOneFree(Discount):
                     return num_free * item.price
 
 
+@dataclasses.dataclass
 class CheapestOneFree(Discount):
-    def __init__(self, name: str, threshold: int) -> None:
-        super().__init__(name)
-        # number needed to purchase to receive the offer
-        self.threshold = threshold
-        self.discount: Union[int, float] = 0
+    name: str
+    threshold: int
 
     def _individual_item_discount(self, items: List[Item]) -> None:
         """
