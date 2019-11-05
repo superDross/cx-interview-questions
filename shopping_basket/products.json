@@ -1,0 +1,8 @@
+[
+  {"name": "Baked Beans", "price": 0.99},
+  {"name": "Biscuits", "price": 1.20},
+  {"name": "Sardines", "price": 1.89},
+  {"name": "Shampoo (Small)", "price": 2.00},
+  {"name": "Shampoo (Medium)", "price": 2.50},
+  {"name": "Shampoo (Large)", "price": 3.50}
+]

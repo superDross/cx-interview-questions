@@ -1,22 +1,33 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from catalogue import Item
 from offers import CheapestOneFree, GetOneFree, Offers, PercentageOff
 
+JSON_ONE = [
+    {"name": "Baked Beans", "offer": "getOneFree", "value": 2},
+    {"name": "Sardines", "offer": "percentOff", "value": 25},
+    {"name": "Shampoo", "offer": "cheapestFree", "value": 3},
+]
+
+JSON_TWO = [
+    {"name": "Baked Beans", "offer": "getOneFree", "value": 2},
+    {"name": "Sardines", "offer": "percentOff", "value": 25},
+]
+
 
 class TestOffers(TestCase):
-    def test_create_offers(self):
-        offers = Offers(
-            [("Baked Beans", 0, 2, 0), ("Sardines", 25, 0, 0), ("Shampoo", 0, 0, 3)]
-        )
-        self.assertTrue(isinstance(offers.discounts[0], GetOneFree))
-        self.assertTrue(isinstance(offers.discounts[1], PercentageOff))
-        self.assertTrue(isinstance(offers.discounts[2], CheapestOneFree))
+    @mock.patch("offers.get_json", return_value=JSON_ONE)
+    def test_create_offers(self, mocked_func):
+        offers = Offers("temp")
+        self.assertTrue(isinstance(offers[0], GetOneFree))
+        self.assertTrue(isinstance(offers[1], PercentageOff))
+        self.assertTrue(isinstance(offers[2], CheapestOneFree))
 
-    def test_get_offer(self):
-        offers = Offers([("Baked Beans", 0, 2, 0), ("Sardines", 25, 0, 0)])
+    @mock.patch("offers.get_json", return_value=JSON_TWO)
+    def test_get_offer(self, mocked_func):
+        offers = Offers("temp")
         result = offers.get("baked beans")
-        self.assertEqual(result, offers.discounts[0])
+        self.assertEqual(result, offers[0])
 
 
 class TestDiscounts(TestCase):
@@ -70,12 +81,7 @@ class TestDiscounts(TestCase):
         self.assertEqual(discounted_price, 5.50)
 
     def test_buy_4_pens_get_cheapest_free(self):
-        pens = [
-            Item("Pen (Black)", 6.00, 5),
-            Item("Pen (Red)", 1.00)
-        ]
+        pens = [Item("Pen (Black)", 6.00, 5), Item("Pen (Red)", 1.00)]
         discount = CheapestOneFree("Pen", 4)
         discounted_price = discount.calculate_discount(pens)
         self.assertEqual(discounted_price, 6.00)
-
-

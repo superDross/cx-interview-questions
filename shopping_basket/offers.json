@@ -1,0 +1,6 @@
+[
+  {"name": "Baked Beans", "offer": "getOneFree", "value": 2},
+  {"name": "Sardines", "offer": "percentOff", "value": 25},
+  {"name": "Super Cool Thing", "offer": "percentOff", "value": 100},
+  {"name": "Shampoo", "offer": "cheapestFree", "value": 3}
+]

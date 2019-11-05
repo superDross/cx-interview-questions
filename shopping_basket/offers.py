@@ -1,11 +1,12 @@
 """
-Allows one to create and manipulate inventory discounts.
+Allows one to json2discounts and manipulate inventory discounts.
 """
 
 import dataclasses
-from typing import List, Tuple, Union
+from typing import List, Union
 
 from catalogue import Item
+from utils import get_json
 
 
 @dataclasses.dataclass
@@ -85,29 +86,28 @@ class CheapestOneFree(Discount):
         return self.discount
 
 
-class Offers:
+class Offers(list):
     """
     Discounts available for our products
     """
 
-    def __init__(self, discounts: List[Tuple[str, float, float, float]]) -> None:
-        self.discounts = self._create(discounts)
+    def __init__(self, json_file_path: str) -> None:
+        super().__init__()
+        self.available_offers = {
+            "getOneFree": GetOneFree,
+            "cheapestFree": CheapestOneFree,
+            "percentOff": PercentageOff,
+        }
 
-    def _create(
-        self, discount_list: List[Tuple[str, float, float, float]]
-    ) -> List[Discount]:
-        store = []
-        for discount in discount_list:
-            name, perc, onefree, cheapestfree = discount
-            if perc:
-                store.append(PercentageOff(name, perc))
-            elif onefree:
-                store.append(GetOneFree(name, onefree))
-            elif cheapestfree:
-                store.append(CheapestOneFree(name, cheapestfree))
-        return store
+        self._json2discounts(json_file_path)
+
+    def _json2discounts(self, json_file_path: str) -> List[Discount]:
+        json_ = get_json(json_file_path)
+        for discount in json_:
+            discount_class = self.available_offers.get(discount["offer"])
+            self.append(discount_class(discount["name"], discount["value"]))
 
     def get(self, item_name: str) -> Discount:
-        for discount in self.discounts:
+        for discount in self:
             if item_name.lower() == discount.name.lower():
                 return discount

@@ -1,32 +1,34 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from basket import Basket
 from catalogue import Catalogue
 from offers import Offers
 
+CATALOGUE = [
+    {"name": "Baked Beans", "price": 0.99},
+    {"name": "Sardines", "price": 1.89},
+    {"name": "Biscuits", "price": 1.20},
+    {"name": "Shampoo (Small)", "price": 2.00},
+    {"name": "Shampoo (Medium)", "price": 2.50},
+    {"name": "Shampoo (Large)", "price": 3.50},
+]
 
-def create_catalogue():
-    return Catalogue(
-        [
-            ("Baked Beans", 0.99),
-            ("Biscuits", 1.20),
-            ("Sardines", 1.89),
-            ("Shampoo (Small)", 2.00),
-            ("Shampoo (Medium)", 2.50),
-            ("Shampoo (Large)", 3.50),
-        ]
-    )
+OFFERS = [
+    {"name": "Baked Beans", "offer": "getOneFree", "value": 2},
+    {"name": "Sardines", "offer": "percentOff", "value": 25},
+    {"name": "Super Cool Totes Available Item", "offer": "percentOff", "value": 100},
+    {"name": "Shampoo", "offer": "cheapestFree", "value": 3},
+]
 
 
-def create_offers():
-    return Offers(
-        [
-            ("Baked Beans", 0, 2, 0),
-            ("Sardines", 25, 0, 0),
-            ("Super Cool Totes Available Item", 100, 0, 0),
-            ("Shampoo", 0, 0, 3),
-        ]
-    )
+@mock.patch("catalogue.get_json", return_value=CATALOGUE)
+def create_catalogue(mocked_func):
+    return Catalogue("temp")
+
+
+@mock.patch("offers.get_json", return_value=OFFERS)
+def create_offers(mocked_func):
+    return Offers("temp")
 
 
 class TestBasket(TestCase):

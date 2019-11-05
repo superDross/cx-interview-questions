@@ -44,7 +44,7 @@ class Basket:
 
     def apply_discount(self) -> None:
         self.discount = 0
-        for offer in self.offers.discounts:
+        for offer in self.offers:
             # required otherwise applying discounts alters the quantities
             items = deepcopy(self._items)
             discount = offer.calculate_discount(items)

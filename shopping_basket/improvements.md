@@ -11,12 +11,22 @@
 
 ## Readability/Integrity
 
+- Use item barcode or stock keeping unit for an item as an identifier between Item and Discount
+
+## Implemented
 
 - Catalogue & Offers should inherit from list
 
-- Use item barcode or stock keeping unit for an item as an identifier between Item and Discount
+- Use type hinting
 
-## Other
+- `CheapestOneFree` discount would likely only work with the test case given
+
+  - e.g. if the `Shampoo (Large)` was 4 instead of 3, then that 1 extra remaining large would not be included in the offer calculated in `_grouped_discount()`.
+  - solution (WON'T WORK): in `_individual_item_discount()` return the quantity used to add to the discount. Back in `calculate_discount()` deduct the returned quantity from the specific item (`item.quantity`) in `items` list before parsing `items` to `_grouped_discount()`
+
+- Item & Discount should be dataclasses as they simply store state and not much logic.
+
+  - Would also take care of a lot boiler plate
 
 - Use JSON as input into `Catalogues` & `Offers`, instead of list of tuples.
 
@@ -52,14 +62,3 @@ class Offers:
             store.append(discount(discount['name'], discount['number'])
         return store
 ```
-
-## Implemented
-
-- Use type hinting
-
-- `CheapestOneFree` discount would likely only work with the test case given
-  - e.g. if the `Shampoo (Large)` was 4 instead of 3, then that 1 extra remaining large would not be included in the offer calculated in `_grouped_discount()`.
-  - solution (WON'T WORK): in `_individual_item_discount()` return the quantity used to add to the discount. Back in `calculate_discount()` deduct the returned quantity from the specific item (`item.quantity`) in `items` list before parsing `items` to `_grouped_discount()`
-
-- Item & Discount should be dataclasses as they simply store state and not much logic.
-  * Would also take care of a lot boiler plate
