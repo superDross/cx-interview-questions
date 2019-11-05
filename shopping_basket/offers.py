@@ -33,7 +33,7 @@ class PercentageOff(Discount):
     def calculate_discount(self, items: List[Item]) -> int:
         for item in items:
             if self.name == item.name:
-                discount = (item.price * (self.percentage / 100)) * item.quantity
+                discount = item.total_price * (self.percentage / 100)
                 return discount
 
 
@@ -54,6 +54,7 @@ class GetOneFree(Discount):
 class CheapestOneFree(Discount):
     name: str
     threshold: int
+    discount: float = 0.00
 
     def _individual_item_discount(self, items: List[Item]) -> None:
         """

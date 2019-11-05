@@ -17,8 +17,8 @@ class Basket:
 
     def __init__(self, catalogue: Catalogue, offers: Offers) -> None:
         self._items: List[Item] = []
-        self.catalogue = catalogue
-        self.offers = offers
+        self.catalogue: Catalogue = catalogue
+        self.offers: Offers = offers
         self.subtotal: Union[int, float] = 0
         self.discount: Union[int, float] = 0
         self.total: Union[int, float] = 0
