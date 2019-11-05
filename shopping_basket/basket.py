@@ -37,9 +37,12 @@ class Basket:
         """
         Take a given quantity of an item out the basket
         """
-        item_names = [item.name.lower() for item in self._items]
-        item_index = item_names.index(item_name)
-        self._items.pop(item_index)
+        for item in self._items:
+            if item.name.lower() == item_name:
+                if item.quantity > quantity:
+                    item.quantity -= quantity
+                elif item.quantity == quantity:
+                    self._items.remove(item)
         self.calculate_price()
 
     def apply_discount(self) -> None:
