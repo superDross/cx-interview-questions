@@ -1,7 +1,8 @@
 import decimal
+from typing import Union
 
 
-def rounder(number):
+def rounder(number: Union[int, float]) -> float:
     """
     Round up at 0.5
 

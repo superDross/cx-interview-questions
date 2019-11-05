@@ -2,18 +2,26 @@
 Allows one to create and manipulate inventory discounts.
 """
 
+from typing import List, Tuple, Union
+
+from catalogue import Item
+
 
 class Discount:
-    def __init__(self, name):
+    """
+    Individual discount available for a given product name
+    """
+
+    def __init__(self, name: str) -> None:
         self.name = name
 
-    def __str__(self):
+    def __str__(self) -> None:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         return f"Discount({self.name})"
 
-    def calulate_discount(self, items):
+    def calulate_discount(self, items: List[Item]) -> None:
         """
         Returns the amount of money to be discounted from the
         items original price
@@ -22,11 +30,11 @@ class Discount:
 
 
 class PercentageOff(Discount):
-    def __init__(self, name, percentage):
+    def __init__(self, name: str, percentage: Union[int, float]) -> None:
         super().__init__(name)
         self.percentage = percentage
 
-    def calculate_discount(self, items):
+    def calculate_discount(self, items: List[Item]) -> int:
         for item in items:
             if self.name == item.name:
                 discount = (item.price * (self.percentage / 100)) * item.quantity
@@ -34,12 +42,12 @@ class PercentageOff(Discount):
 
 
 class GetOneFree(Discount):
-    def __init__(self, name, threshold):
+    def __init__(self, name: str, threshold: int) -> None:
         super().__init__(name)
         # number needed to purchase to receive the offer
         self.threshold = threshold
 
-    def calculate_discount(self, items):
+    def calculate_discount(self, items: List[Item]) -> int:
         for item in items:
             if self.name == item.name:
                 if item.quantity > self.threshold:
@@ -48,13 +56,13 @@ class GetOneFree(Discount):
 
 
 class CheapestOneFree(Discount):
-    def __init__(self, name, threshold):
+    def __init__(self, name: str, threshold: int) -> None:
         super().__init__(name)
         # number needed to purchase to receive the offer
         self.threshold = threshold
-        self.discount = 0
+        self.discount: Union[int, float] = 0
 
-    def _individual_item_discount(self, items):
+    def _individual_item_discount(self, items: List[Item]) -> None:
         """
         Apply discount if an individual items quantity surpasses
         the threshold for the offer
@@ -64,7 +72,7 @@ class CheapestOneFree(Discount):
                 self.discount += (item.quantity // self.threshold) * item.price
                 item.quantity = item.quantity % self.threshold
 
-    def _grouped_discount(self, items):
+    def _grouped_discount(self, items: List[Item]) -> None:
         """
         Apply discount to grouped items that are collectively above
         the offer threshold but individually beneath it
@@ -76,7 +84,7 @@ class CheapestOneFree(Discount):
             if total_quantity >= self.threshold:
                 self.discount += (total_quantity // self.threshold) * lowest_price
 
-    def calculate_discount(self, items):
+    def calculate_discount(self, items: List[Item]) -> int:
         self.discount = 0
         relevant_items = [item for item in items if self.name in item.name]
         if relevant_items:
@@ -88,15 +96,14 @@ class CheapestOneFree(Discount):
 class Offers:
     """
     Discounts available for our products
-
-    Attributes:
-        items (list: tuple): tuple contains product name and offers
     """
 
-    def __init__(self, discounts):
+    def __init__(self, discounts: List[Tuple[str, float, float, float]]) -> None:
         self.discounts = self._create(discounts)
 
-    def _create(self, discount_list):
+    def _create(
+        self, discount_list: List[Tuple[str, float, float, float]]
+    ) -> List[Discount]:
         store = []
         for discount in discount_list:
             name, perc, onefree, cheapestfree = discount
@@ -108,7 +115,7 @@ class Offers:
                 store.append(CheapestOneFree(name, cheapestfree))
         return store
 
-    def get(self, item_name):
+    def get(self, item_name: str) -> Discount:
         for discount in self.discounts:
             if item_name.lower() == discount.name.lower():
                 return discount

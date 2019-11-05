@@ -2,57 +2,51 @@
 Classes to aid in creating a shopping inventory.
 """
 
+from typing import List, Tuple
+
 
 class Item:
     """
     Individual shopping item available in the inventory
-
-    Attributes:
-        name (str): product name
-        price (float): product cost
-        quantity (int): number of products
     """
 
-    def __init__(self, name, price, quantity=1):
+    def __init__(self, name: str, price: float, quantity: int = 1) -> None:
         self.name = name
         self.price = price
         self.quantity = quantity
 
         self._check_valid()
 
-    def __str__(self):
+    def __str__(self) -> None:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         return f"Item({self.name}, {self.price}, {self.quantity})"
 
-    def _check_valid(self):
+    def _check_valid(self) -> None:
         if not isinstance(self.name, str):
-            raise ValueError(f"item name must be string")
+            raise ValueError("item name must be string")
         if self.price <= 0:
-            raise ValueError(f"price must be greater than zero")
+            raise ValueError("price must be greater than zero")
 
 
 class Catalogue:
     """
     Inventory of Item objects available
-
-    Attributes:
-        items (list: tuple): product names and prices
     """
 
-    def __init__(self, items):
+    def __init__(self, items: List[Tuple[str, float]]) -> None:
         self.items = self._create(items)
 
-    def _create(self, item_list):
+    def _create(self, item_list: List[Tuple[str, float]]) -> List[Item]:
         return [Item(name=item[0], price=item[1]) for item in item_list]
 
-    def get(self, item_name):
+    def get(self, item_name: str) -> Item:
         for item in self.items:
             if item_name.lower() == item.name.lower():
                 return item
 
-    def fuzzy_get(self, item_sub):
+    def fuzzy_get(self, item_sub: str) -> Item:
         """
         Gets all items with names that match a given substring
         """

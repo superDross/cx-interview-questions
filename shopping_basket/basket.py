@@ -3,28 +3,27 @@ Classes allow users to store inventory items
 """
 
 from copy import deepcopy
+from typing import List, Union
 
+from catalogue import Catalogue, Item
+from offers import Offers
 from utils import rounder
 
 
 class Basket:
     """
     Shopping basket to calculate prices of stored items
-
-    Attributes:
-        catalogue (Catalogue): shopping inventory
-        offers (Offers): discounts available across products
     """
 
-    def __init__(self, catalogue, offers):
-        self._items = []
+    def __init__(self, catalogue: Catalogue, offers: Offers) -> None:
+        self._items: List[Item] = []
         self.catalogue = catalogue
         self.offers = offers
-        self.subtotal = 0
-        self.discount = 0
-        self.total = 0
+        self.subtotal: Union[int, float] = 0
+        self.discount: Union[int, float] = 0
+        self.total: Union[int, float] = 0
 
-    def add(self, item_name, quantity=1):
+    def add(self, item_name: str, quantity: int = 1) -> None:
         """
         Place a given quantity of an item into the basket
         """
@@ -34,7 +33,7 @@ class Basket:
             self._items.append(item)
             self.calculate_price()
 
-    def remove(self, item_name, quantity=1):
+    def remove(self, item_name: str, quantity: int = 1) -> None:
         """
         Take a given quantity of an item out the basket
         """
@@ -43,7 +42,7 @@ class Basket:
         self._items.pop(item_index)
         self.calculate_price()
 
-    def apply_discount(self):
+    def apply_discount(self) -> None:
         self.discount = 0
         for offer in self.offers.discounts:
             # required otherwise applying discounts alters the quantities
@@ -52,7 +51,7 @@ class Basket:
             if discount:
                 self.discount += rounder(discount)
 
-    def calculate_price(self):
+    def calculate_price(self) -> None:
         """
         Calculates subtotal, disount & total price of all items in the basket
         """
