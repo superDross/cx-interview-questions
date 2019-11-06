@@ -5,6 +5,13 @@
 - Optimise by using `cProfile` to identify slow parts of the code.
 - Use `memory-profiler` to identify high memory functions
 
+- `Catalogue` should store a dict instead and an item can be added like below.
+  * you can then simply use the dicts get method instead of the inefficient iterative one implemented
+
+```
+item = {'item-name': {'price': 10.00, 'quantity': 2}}
+```
+
 ## Preparation
 
 - Do more research on inventory management

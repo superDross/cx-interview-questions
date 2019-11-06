@@ -54,7 +54,7 @@ class GetOneFree(Discount):
 class CheapestOneFree(Discount):
     name: str
     threshold: int
-    discount: float = 0.00
+    discount: Union[int, float] = 0.00
 
     def _individual_item_discount(self, items: List[Item]) -> None:
         """

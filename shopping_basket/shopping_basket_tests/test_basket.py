@@ -57,7 +57,6 @@ class TestBasket(TestCase):
         self.assertEqual(self.basket._items[1].name, "Biscuits")
         self.assertEqual(self.basket._items[1].quantity, 1)
 
-
     def test_subtotal(self):
         self.basket.add("baked beans")
         self.basket.add("biscuits")
