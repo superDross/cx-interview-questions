@@ -6,7 +6,7 @@ import dataclasses
 from typing import List, Union
 
 from catalogue import Item
-from utils import get_json
+from utilities import get_json
 
 
 @dataclasses.dataclass

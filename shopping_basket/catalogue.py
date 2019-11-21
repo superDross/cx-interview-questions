@@ -4,7 +4,7 @@ Classes to aid in creating a shopping inventory.
 
 import dataclasses
 from typing import List
-from utils import get_json
+from utilities import get_json
 
 
 @dataclasses.dataclass(order=True)

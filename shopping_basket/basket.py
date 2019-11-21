@@ -7,7 +7,7 @@ from typing import List, Union
 
 from catalogue import Catalogue, Item
 from offers import Offers
-from utils import rounder
+from utilities import rounder
 
 
 class Basket:

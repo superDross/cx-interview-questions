@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from utils import get_json, rounder
+from utilities import get_json, rounder
 
 
 class TestUtils(TestCase):
