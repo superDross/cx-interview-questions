@@ -13,25 +13,12 @@ from basket import Basket
 from catalogue import Catalogue
 from offers import Offers
 
-catalogue = Catalogue(
-    [
-        ("Baked Beans (small)", 0.99),
-        ("Baked Beans (large)", 1.99),
-        ("Biscuits", 1.20),
-        ("Sardines", 1.89),
-    ]
-)
-
-offers = Offers(
-    [
-        ("Baked Beans", 0, 2, 0),
-        ("Sardines", 25, 0, 0),
-    ]
-)
+catalogue = Catalogue('./products.json')
+offers = Offers('./offers.json')
 
 basket = Basket(catalogue, offers)
 
-basket.add("baked beans (small)", quantity=5)
+basket.add("baked beans", quantity=5)
 basket.add("sardines")
 
 print(
