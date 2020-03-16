@@ -3,7 +3,7 @@ Allows one to json2discounts and manipulate inventory discounts.
 """
 
 import dataclasses
-from typing import List, Union
+from typing import Dict, List, Optional, Type, Union
 
 from catalogue import Item
 from utilities import get_json
@@ -30,11 +30,12 @@ class PercentageOff(Discount):
     name: str
     percentage: Union[int, float]
 
-    def calculate_discount(self, items: List[Item]) -> int:
+    def calculate_discount(self, items: List[Item]) -> Optional[int]:
         for item in items:
             if self.name == item.name:
                 discount = item.total_price * (self.percentage / 100)
                 return discount
+        return None
 
 
 @dataclasses.dataclass
@@ -42,12 +43,13 @@ class GetOneFree(Discount):
     name: str
     threshold: int
 
-    def calculate_discount(self, items: List[Item]) -> int:
+    def calculate_discount(self, items: List[Item]) -> Optional[int]:
         for item in items:
             if self.name == item.name:
                 if item.quantity > self.threshold:
                     num_free = item.quantity // (self.threshold + 1)
                     return num_free * item.price
+        return None
 
 
 @dataclasses.dataclass
@@ -94,7 +96,7 @@ class Offers(list):
 
     def __init__(self, json_file_path: str) -> None:
         super().__init__()
-        self.available_offers = {
+        self.available_offers: Dict[str, Type[Discount]] = {
             "getOneFree": GetOneFree,
             "cheapestFree": CheapestOneFree,
             "percentOff": PercentageOff,
@@ -102,13 +104,18 @@ class Offers(list):
 
         self._json2discounts(json_file_path)
 
-    def _json2discounts(self, json_file_path: str) -> List[Discount]:
+    def _json2discounts(self, json_file_path: str) -> None:
         json_ = get_json(json_file_path)
         for discount in json_:
-            discount_class = self.available_offers.get(discount["offer"])
-            self.append(discount_class(discount["name"], discount["value"]))
+            discount_class = self.available_offers[discount["offer"]]
+            # ignore as the base class does not have a second arg
+            discont_obj = discount_class(
+                discount["name"], discount["value"]
+            )  # type: ignore
+            self.append(discont_obj)
 
-    def get(self, item_name: str) -> Discount:
+    def get(self, item_name: str) -> Optional[Discount]:
         for discount in self:
             if item_name.lower() == discount.name.lower():
                 return discount
+        return None

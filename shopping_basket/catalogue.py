@@ -3,7 +3,8 @@ Classes to aid in creating a shopping inventory.
 """
 
 import dataclasses
-from typing import List
+from typing import Generator, List, Optional, Union
+
 from utilities import get_json
 
 
@@ -19,11 +20,11 @@ class Item:
         if self.price <= 0:
             raise ValueError("price must be greater than zero")
 
-    def __iter__(self):
+    def __iter__(self) -> Generator:
         yield from dataclasses.astuple(self)
 
     @property
-    def total_price(self):
+    def total_price(self) -> Union[int, float]:
         return self.price * self.quantity
 
 
@@ -36,17 +37,18 @@ class Catalogue(list):
         super().__init__()
         self._json2items(json_file_path)
 
-    def _json2items(self, json_file_path: str) -> List[Item]:
+    def _json2items(self, json_file_path: str) -> None:
         json_ = get_json(json_file_path)
         for item in json_:
             self.append(Item(name=item["name"], price=item["price"]))
 
-    def get(self, item_name: str) -> Item:
+    def get(self, item_name: str) -> Optional[Item]:
         for item in self:
             if item_name.lower() == item.name.lower():
                 return item
+        return None
 
-    def fuzzy_get(self, item_sub: str) -> Item:
+    def fuzzy_get(self, item_sub: str) -> List[Item]:
         """
         Gets all items with names that match a given substring
         """
